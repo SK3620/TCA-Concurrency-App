@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		775992B26A49DE8268F85F28 /* Pods_TCA_Concurrency_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405B90DBDC1EAAA684B2DE35 /* Pods_TCA_Concurrency_App.framework */; };
+		8339ADE52D59F0CA0066D126 /* CounterFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8339ADE42D59F0CA0066D126 /* CounterFeature.swift */; };
 		8375C72A2D3E38FD005118AC /* TCA_Concurrency_AppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375C7292D3E38FD005118AC /* TCA_Concurrency_AppApp.swift */; };
 		8375C72C2D3E38FD005118AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375C72B2D3E38FD005118AC /* ContentView.swift */; };
 		8375C72E2D3E38FF005118AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8375C72D2D3E38FF005118AC /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		405B90DBDC1EAAA684B2DE35 /* Pods_TCA_Concurrency_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TCA_Concurrency_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750EEAC6DB66E9A583E3A947 /* Pods-TCA-Concurrency-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCA-Concurrency-App.release.xcconfig"; path = "Target Support Files/Pods-TCA-Concurrency-App/Pods-TCA-Concurrency-App.release.xcconfig"; sourceTree = "<group>"; };
+		8339ADE42D59F0CA0066D126 /* CounterFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterFeature.swift; sourceTree = "<group>"; };
 		8375C7262D3E38FD005118AC /* TCA-Concurrency-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TCA-Concurrency-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8375C7292D3E38FD005118AC /* TCA_Concurrency_AppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCA_Concurrency_AppApp.swift; sourceTree = "<group>"; };
 		8375C72B2D3E38FD005118AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 			children = (
 				8375C7292D3E38FD005118AC /* TCA_Concurrency_AppApp.swift */,
 				8375C72B2D3E38FD005118AC /* ContentView.swift */,
+				8339ADE42D59F0CA0066D126 /* CounterFeature.swift */,
 				8375C72D2D3E38FF005118AC /* Assets.xcassets */,
 				8375C72F2D3E38FF005118AC /* Preview Content */,
 			);
@@ -195,6 +198,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8339ADE52D59F0CA0066D126 /* CounterFeature.swift in Sources */,
 				8375C72C2D3E38FD005118AC /* ContentView.swift in Sources */,
 				8375C72A2D3E38FD005118AC /* TCA_Concurrency_AppApp.swift in Sources */,
 			);
@@ -343,6 +347,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TCA-Concurrency-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -373,6 +378,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kenta-suzuki.TCA-Concurrency-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -410,8 +416,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.17.1;
+				kind = exactVersion;
+				version = 1.17.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
