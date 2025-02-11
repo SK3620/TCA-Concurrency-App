@@ -13,6 +13,7 @@
 		8375C72C2D3E38FD005118AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375C72B2D3E38FD005118AC /* ContentView.swift */; };
 		8375C72E2D3E38FF005118AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8375C72D2D3E38FF005118AC /* Assets.xcassets */; };
 		8375C7312D3E38FF005118AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8375C7302D3E38FF005118AC /* Preview Assets.xcassets */; };
+		83C1C1032D5B85EE00E1EB33 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C1C1022D5B85E100E1EB33 /* CounterView.swift */; };
 		83E9C15B2D43D87B00ED2090 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 83E9C15A2D43D87B00ED2090 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		8375C72B2D3E38FD005118AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8375C72D2D3E38FF005118AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8375C7302D3E38FF005118AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		83C1C1022D5B85E100E1EB33 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		A881B907F1A1E76DD2227319 /* Pods-TCA-Concurrency-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCA-Concurrency-App.debug.xcconfig"; path = "Target Support Files/Pods-TCA-Concurrency-App/Pods-TCA-Concurrency-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +76,7 @@
 				8375C7292D3E38FD005118AC /* TCA_Concurrency_AppApp.swift */,
 				8375C72B2D3E38FD005118AC /* ContentView.swift */,
 				8339ADE42D59F0CA0066D126 /* CounterFeature.swift */,
+				83C1C1022D5B85E100E1EB33 /* CounterView.swift */,
 				8375C72D2D3E38FF005118AC /* Assets.xcassets */,
 				8375C72F2D3E38FF005118AC /* Preview Content */,
 			);
@@ -201,6 +204,7 @@
 				8339ADE52D59F0CA0066D126 /* CounterFeature.swift in Sources */,
 				8375C72C2D3E38FD005118AC /* ContentView.swift in Sources */,
 				8375C72A2D3E38FD005118AC /* TCA_Concurrency_AppApp.swift in Sources */,
+				83C1C1032D5B85EE00E1EB33 /* CounterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
