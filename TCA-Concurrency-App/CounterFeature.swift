@@ -17,12 +17,16 @@ struct CounterFeature {
     @ObservableState
     struct State {
         var count = 0  // カウンターの現在の値（初期値は0）
+        var fact: String?
+        var isLoading = false
     }
     
     // ユーザーが実行できるアクション（ボタンのタップ）
     enum Action {
         case decrementButtonTapped  // 「-」ボタンをタップ
         case incrementButtonTapped  // 「+」ボタンをタップ
+        case factButtonTapped
+        case factResponse(String)
     }
     
     // some ReducerOf<Self> を使うことで、「この Reducer は CounterFeature のものですよ」 ということを明示
@@ -34,13 +38,75 @@ struct CounterFeature {
             switch action {
             case .decrementButtonTapped:
                 state.count -= 1  // `-` ボタンを押したらカウントを減らす
+                state.fact = nil
                 return .none  // Effect を返さない（副作用なし）
+                
+            case .factButtonTapped:
+                state.fact = nil
+                state.isLoading = true
+                
+                // ---------------------------
+                /*
+                 ・Reducer 内で await を使うことはできない
+                 ・エラーハンドリングが行われていない
+                 そこで非同期リクエストを実行するにはEffectを活用！
+                 
+                 let (data, _) = try await URLSession.shared
+                 .data(from: URL(string: "http://numbersapi.com/\(state.count)")!)
+                 state.fact = String(decoding: data, as: UTF8.self)
+                 */
+                // ---------------------------
+
+                // ---------------------------
+                /*
+                 Effect.run(operation: (Send<Action>) -> Void)
+                 public static func run(
+                 operation: @escaping @Sendable (_ send: Send<Action>) async throws -> Void...)
+                 */
+                // ---------------------------
+                return .run { [count = state.count] send in
+                    // numbersapi.com というAPIから数値の情報を取得
+                    let (data, _) = try await URLSession.shared
+                        .data(from: URL(string: "http://numbersapi.com/\(count)")!)
+                    let fact = String(decoding: data, as: UTF8.self)
+                    // しかし、Effect.run {} のクロージャは Sendable でなければならず、state を直接変更することはできません。
+                    // そのため、非同期処理の結果を factResponse アクションとして送信し、Reducer で処理します。
+                    await send(.factResponse(fact))
+                }
+                
+            case let .factResponse(fact):
+                // factResponse アクションが Reducer で処理され、状態を更新
+                state.fact = fact
+                state.isLoading = false
+                return .none
+                
                 
             case .incrementButtonTapped:
                 state.count += 1  // `+` ボタンを押したらカウントを増やす
+                state.fact = nil
                 return .none  // Effect を返さない（副作用なし）
             }
         }
     }
 }
 
+/*
+〜 Effect 〜
+ Step 1: Effect の基本
+ TCA において Effect は、非同期処理を実行するための仕組みです。
+ Reducer は純粋な状態の変換を担当し、Effect は外部システムとやり取りするために使われます。
+ Effect は Store によって実行され、外部データを取得してから Reducer にデータを戻す役割を持つ。
+
+ Step 2: Effect を使った非同期処理の記述方法
+ TCA では、Effect を作成するためのメソッド .run {} を提供しています。
+ この .run のクロージャ内で非同期処理を行い、結果を send を使って Reducer に返します。
+*/
+
+/*
+〜 Reducer内でawaitは使用不可 〜
+ Reducer は 同期処理 しか許可されていません。そのため、以下のような await を直接書くコードはエラーになります。
+ let (data, _) = try await URLSession.shared
+     .data(from: URL(string: "http://numbersapi.com/\(state.count)")!)
+ これは TCA が「純粋関数」の考え方を採用しているため です。
+ Reducer では単純な状態の変換のみを行い、非同期処理のような「副作用」は Effect に分離する設計になっています。
+*/

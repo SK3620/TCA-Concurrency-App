@@ -15,7 +15,7 @@ struct CounterView: View {
     // typealias StoreOf<R> = Store<R.State, R.Action> where R : Reducer
     // R.State はその Reducer に関連する状態（例えば CounterFeature.State）。
     // R.Action はその Reducer に関連するアクション（例えば CounterFeature.Action）。
-
+    
     
     var body: some View {
         VStack {
@@ -40,6 +40,23 @@ struct CounterView: View {
                 .padding()
                 .background(Color.black.opacity(0.1))
                 .cornerRadius(10)
+                
+                Button("Fact") {
+                    store.send(.factButtonTapped)
+                }
+                .font(.largeTitle)
+                .padding()
+                .background(Color.black.opacity(0.1))
+                .cornerRadius(10)
+                
+                if store.isLoading {
+                    ProgressView()
+                } else if let fact = store.fact {
+                    Text(fact)
+                        .font(.largeTitle)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                }
             }
         }
     }
