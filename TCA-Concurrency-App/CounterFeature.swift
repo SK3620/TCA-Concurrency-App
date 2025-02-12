@@ -12,7 +12,8 @@ import ComposableArchitecture
 @Reducer
 struct CounterFeature {
     
-    // @ObservableState を使うと、SwiftUIのViewがこのStateを監視できる
+    // @ObservableState を使うと、ViewがこのStateを監視できる 状態の変化に反応して自動的に再描画を行う
+    // iOS 17 未満のアプリでは、View 全体 を WithPerceptionTracking で囲む必要がある
     @ObservableState
     struct State {
         var count = 0  // カウンターの現在の値（初期値は0）
