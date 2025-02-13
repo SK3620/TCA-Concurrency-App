@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
 // @Reducer マクロを使って、TCA（The Composable Architecture）のReducerを定義
 // Reducerとは「今の状態 (State)」と「実行された操作 (Action)」を受け取って、状態を変更する処理を書く場所」 のこと
@@ -19,6 +20,7 @@ struct CounterFeature {
         var count = 0  // カウンターの現在の値（初期値は0）
         var fact: String?
         var isLoading = false
+        var isTimerRunning = false
     }
     
     // ユーザーが実行できるアクション（ボタンのタップ）
@@ -27,7 +29,11 @@ struct CounterFeature {
         case incrementButtonTapped  // 「+」ボタンをタップ
         case factButtonTapped
         case factResponse(String)
+        case timerTick
+        case toggleTimerButtonTapped
     }
+    
+    enum CancelID { case timer }
     
     // some ReducerOf<Self> を使うことで、「この Reducer は CounterFeature のものですよ」 ということを明示
     // 「アクションが来たら、どう State を変更するか？」を決める処理をまとめる場所
@@ -56,7 +62,7 @@ struct CounterFeature {
                  state.fact = String(decoding: data, as: UTF8.self)
                  */
                 // ---------------------------
-
+                
                 // ---------------------------
                 /*
                  Effect.run(operation: (Send<Action>) -> Void)
@@ -85,6 +91,25 @@ struct CounterFeature {
                 state.count += 1  // `+` ボタンを押したらカウントを増やす
                 state.fact = nil
                 return .none  // Effect を返さない（副作用なし）
+                
+            case .timerTick:
+                state.count += 1
+                state.fact = nil
+                return .none
+                
+            case .toggleTimerButtonTapped:
+                state.isTimerRunning.toggle()
+                if state.isTimerRunning {
+                    return .run { send in
+                        while true {
+                            try await Task.sleep(for: .seconds(1))
+                            await send(.timerTick)
+                        }
+                    }
+                    .cancellable(id: CancelID.timer)
+                } else {
+                    return .cancel(id: CancelID.timer)
+                }
             }
         }
     }
