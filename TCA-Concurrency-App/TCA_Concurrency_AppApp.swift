@@ -18,7 +18,7 @@ struct MyApp: App {
   
   var body: some Scene {
     WindowGroup {
-      CounterView(store: MyApp.store)
+        CounterView(store: MyApp.store)
     }
   }
 }
