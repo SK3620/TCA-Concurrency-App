@@ -77,6 +77,8 @@ struct CounterFeature {
                     let fact = String(decoding: data, as: UTF8.self)
                     // しかし、Effect.run {} のクロージャは Sendable でなければならず、state を直接変更することはできません。
                     // そのため、非同期処理の結果を factResponse アクションとして送信し、Reducer で処理します。
+                    
+                    // send は、非同期処理の結果を Reducer に渡すための関数
                     await send(.factResponse(fact))
                 }
                 
@@ -100,12 +102,12 @@ struct CounterFeature {
             case .toggleTimerButtonTapped:
                 state.isTimerRunning.toggle()
                 if state.isTimerRunning {
-                    return .run { send in
+                    return .run(operation: { (send: Send<CounterFeature.Action>) async throws -> Void in
                         while true {
                             try await Task.sleep(for: .seconds(1))
                             await send(.timerTick)
                         }
-                    }
+                    })
                     .cancellable(id: CancelID.timer)
                 } else {
                     return .cancel(id: CancelID.timer)
@@ -134,4 +136,12 @@ struct CounterFeature {
      .data(from: URL(string: "http://numbersapi.com/\(state.count)")!)
  これは TCA が「純粋関数」の考え方を採用しているため です。
  Reducer では単純な状態の変換のみを行い、非同期処理のような「副作用」は Effect に分離する設計になっています。
+*/
+
+/*
+ return .run { [count = state.count] send in ...}
+ ✅ [count = state.count] は、state.count の現在の値を コピーして保存 するための仕組み。
+ ✅ Effect.run {} は非同期のため、クロージャの中で state を直接参照するとスレッドセーフではなくなる。
+ ✅ state.count を コピーすることで、非同期処理の中で安全に使えるようにしている。
+ ✅ count という新しい変数として使うことで、state.count の変更の影響を受けなくなる。
 */
