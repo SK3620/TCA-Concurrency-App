@@ -145,3 +145,30 @@ struct CounterFeature {
  ✅ state.count を コピーすることで、非同期処理の中で安全に使えるようにしている。
  ✅ count という新しい変数として使うことで、state.count の変更の影響を受けなくなる。
 */
+
+/*
+ 🛠 cancellable とは？
+
+ cancellable は Effect をキャンセル可能にする ための TCA（The Composable Architecture）の機能です。
+ 特定の ID を付けて あとからその Effect を停止できる ようにします。
+ 
+ .cancellable(id: CancelID.timer)
+ これを付けることで、Effect に CancelID.timer という ID が紐づけられます。
+ その結果、次のようなメリットがあります。
+ ✅ Effect を後からキャンセルできる
+ ✅ 同じ ID の Effect が実行中の場合、新しい Effect を開始すると前の Effect を自動でキャンセルする
+ 
+ 
+ return .run { send in
+     while true {
+         try await Task.sleep(for: .seconds(1))
+         await send(.timerTick)
+     }
+ }
+ .cancellable(id: CancelID.timer)
+ 1️⃣ 最初に実行されると、ID CancelID.timer の Effect が登録される。
+ 2️⃣ 同じ CancelID.timer の Effect が再度実行されると、前の Effect はキャンセルされる。
+ 3️⃣ .cancel(id: CancelID.timer) を実行すると、この Effect が即座に停止する。
+ 
+ これにより、id が CancelID.timer の Effect がすべて停止 します。
+*/
