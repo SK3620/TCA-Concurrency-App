@@ -78,3 +78,39 @@ Task {
 
 // 🚨 continuation.resume(returning:) は「1回だけ」呼ぶこと！
 //    2回以上呼ぶとクラッシュするので注意！（Swift は1回しか結果を返せないルール）
+
+// MARK: - エラーが発生するコールバック関数を非同期関数に変換
+struct MyError: Error {}
+// エラーが発生するコールバック関数
+func hello(completion: (Result<String, Error>) -> ()) {
+    sleep(3) // 時間のかかる処理
+    let hasError = Bool.random()
+    if hasError {
+        completion(.failure(MyError()))
+    } else {
+        completion(.success("Hello"))
+    }
+}
+
+// 非同期関数に変換
+func asyncHello() async throws -> String {
+    return try await withCheckedThrowingContinuation { continuation in
+        // コールバックの結果を continuation.resume(returning:) で返す
+        hello { result in
+            continuation.resume(with: result)
+        }
+    }
+}
+
+// init(priority: TaskPriority?, operation: () async -> Success)
+// Task.init(operation: { () async -> Void in })
+// クロージャにはasyncがついているのでTaskのスコープの中ではawaitができる
+// Taskなしでは、同期的な処理になるため、コンパイルエラーになる
+Task {
+    do {
+        let hello = try await asyncHello()
+        print(hello)
+    } catch {
+        print("Error")
+    }
+}
