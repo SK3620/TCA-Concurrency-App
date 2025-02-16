@@ -21,6 +21,7 @@
 /* Begin PBXFileReference section */
 		405B90DBDC1EAAA684B2DE35 /* Pods_TCA_Concurrency_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TCA_Concurrency_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750EEAC6DB66E9A583E3A947 /* Pods-TCA-Concurrency-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCA-Concurrency-App.release.xcconfig"; path = "Target Support Files/Pods-TCA-Concurrency-App/Pods-TCA-Concurrency-App.release.xcconfig"; sourceTree = "<group>"; };
+		831ADBCF2D60E23D00BDB536 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8339ADE42D59F0CA0066D126 /* CounterFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterFeature.swift; sourceTree = "<group>"; };
 		836D0C692D5CEC9000952BE6 /* LearningMemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemo.swift; sourceTree = "<group>"; };
 		8375C7262D3E38FD005118AC /* TCA-Concurrency-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TCA-Concurrency-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +80,7 @@
 				8375C72B2D3E38FD005118AC /* ContentView.swift */,
 				8339ADE42D59F0CA0066D126 /* CounterFeature.swift */,
 				83C1C1022D5B85E100E1EB33 /* CounterView.swift */,
+				831ADBCF2D60E23D00BDB536 /* MyPlayground.playground */,
 				836D0C692D5CEC9000952BE6 /* LearningMemo.swift */,
 				8375C72D2D3E38FF005118AC /* Assets.xcassets */,
 				8375C72F2D3E38FF005118AC /* Preview Content */,
