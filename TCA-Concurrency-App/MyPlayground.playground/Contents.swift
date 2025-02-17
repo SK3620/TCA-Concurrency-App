@@ -114,3 +114,38 @@ Task {
         print("Error")
     }
 }
+
+// MARK: - Task.init
+override func viewDidLoad() {
+  super.viewDidLoad()
+  
+  // ⭐️ここはメインスレッド
+  Task {
+    // このTaskを実行するスレッドはTask初期化の呼び出し元のコンテキストを引き継ぎます。
+    // つまり、このTask内の同期処理はメインスレッドで実行されます。
+
+    // 非同期関数`fetchTodo(id:)`はバックグランドスレッドで処理されます。
+    // その間このTask内の処理は一時停止し、メインスレッドを明け渡します。
+    // メインスレッドはブロックされず、他の処理（例えば UI の更新やユーザー入力の処理など）が続行できる。
+
+    let todo = try! await fetchTodo(id: 1)
+    
+    // `fetchTodo(id:)`メソッドが完了するとこのTaskが再開します。
+    // このTask内の同期処理はメインスレッドで実行されるので、ここもメインスレッドです。
+    view.addSubview(TodoView(todo)) // 👌
+  }
+}
+
+// DispatchQueue.global().async との違い
+DispatchQueue.global().async {
+    let todo = fetchTodoSync(id: 1)  // 完全同期処理（await なし）
+    DispatchQueue.main.async {
+        view.addSubview(TodoView(todo))
+    }
+}
+/*
+ DispatchQueue.global().async
+ を使うと、最初からバックグラウンドスレッドで動くが、完了後にDispatchQueue.main.async で明示的にメインスレッドに戻る必要がある。
+ Taskはコンテキストを引き継ぐので、最初のスレッドがメインなら、完了後もメインスレッドに戻る！
+ 非同期処理中もメインスレッドが解放される点は共通だが、Swift Concurrencyの方が簡潔で安全。
+*/
