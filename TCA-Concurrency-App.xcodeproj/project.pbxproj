@@ -15,6 +15,7 @@
 		8375C72E2D3E38FF005118AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8375C72D2D3E38FF005118AC /* Assets.xcassets */; };
 		8375C7312D3E38FF005118AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8375C7302D3E38FF005118AC /* Preview Assets.xcassets */; };
 		83C1C1032D5B85EE00E1EB33 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C1C1022D5B85E100E1EB33 /* CounterView.swift */; };
+		83D65D8A2D6381BE00B61310 /* CounterFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D65D892D6381B800B61310 /* CounterFeatureTests.swift */; };
 		83E9C15B2D43D87B00ED2090 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 83E9C15A2D43D87B00ED2090 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		8375C72D2D3E38FF005118AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8375C7302D3E38FF005118AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		83C1C1022D5B85E100E1EB33 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
+		83D65D892D6381B800B61310 /* CounterFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterFeatureTests.swift; sourceTree = "<group>"; };
 		A881B907F1A1E76DD2227319 /* Pods-TCA-Concurrency-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TCA-Concurrency-App.debug.xcconfig"; path = "Target Support Files/Pods-TCA-Concurrency-App/Pods-TCA-Concurrency-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +84,7 @@
 				83C1C1022D5B85E100E1EB33 /* CounterView.swift */,
 				831ADBCF2D60E23D00BDB536 /* MyPlayground.playground */,
 				836D0C692D5CEC9000952BE6 /* LearningMemo.swift */,
+				83D65D882D6381A700B61310 /* Tests */,
 				8375C72D2D3E38FF005118AC /* Assets.xcassets */,
 				8375C72F2D3E38FF005118AC /* Preview Content */,
 			);
@@ -94,6 +97,14 @@
 				8375C7302D3E38FF005118AC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		83D65D882D6381A700B61310 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				83D65D892D6381B800B61310 /* CounterFeatureTests.swift */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		AA74A5290F70D66BFD049E05 /* Frameworks */ = {
@@ -211,6 +222,7 @@
 				8375C72C2D3E38FD005118AC /* ContentView.swift in Sources */,
 				8375C72A2D3E38FD005118AC /* TCA_Concurrency_AppApp.swift in Sources */,
 				83C1C1032D5B85EE00E1EB33 /* CounterView.swift in Sources */,
+				83D65D8A2D6381BE00B61310 /* CounterFeatureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
