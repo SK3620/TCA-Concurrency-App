@@ -33,8 +33,13 @@ struct CounterFeatureTests {
         // ここで、{ $0.count = 1 } のように書くことで
         //「アクション後に状態がどうなるべきか」を明示します。
         //（状態が想定と異なるとテストが失敗します）
+        // ストアに increment アクションを送ったとき、状態が count + 1 に更新されることをテストする場合：
+        await store.send(CounterFeature.Action.incrementButtonTapped, assert: { (state: inout CounterFeature.State) throws -> Void in
+            // CounterFeature.stateを受け取る
+            // state.count = 1
+        })
         await store.send(.incrementButtonTapped) {
-            $0.count = 1
+            $0.count = 1 // 期待される状態に書き換える
           }
         await store.send(.decrementButtonTapped) {
             $0.count = 0

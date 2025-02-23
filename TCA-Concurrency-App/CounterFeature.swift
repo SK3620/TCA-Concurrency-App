@@ -38,6 +38,8 @@ struct CounterFeature {
     // some ReducerOf<Self> を使うことで、「この Reducer は CounterFeature のものですよ」 ということを明示
     // 「アクションが来たら、どう State を変更するか？」を決める処理をまとめる場所
     var body: some ReducerOf<Self> {
+        
+        //   public init(_ reduce: @escaping (_ state: inout State, _ action: Action) -> Effect<Action>) { }
         Reduce { state, action in
             // state: 現在の状態 (CounterFeature.State)
             // action: ユーザーが実行した操作 (CounterFeature.Action)
