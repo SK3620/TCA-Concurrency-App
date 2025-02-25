@@ -14,6 +14,7 @@ func world() async throws -> String {
     return "World"
 }
 
+// Task → TaskはSwift Concurrencyにおいて非同期処理を実行する基本単位である。同期メソッド内で非同期処理を実行する必要があるときに使用し、非同期関数を呼び出すための文脈を作るために使う。
 // Task.init(operation: { () async -> Void in })
 // 呼び出し
 Task {
@@ -56,13 +57,18 @@ func asyncHello() async -> String {
     return await withCheckedContinuation { continuation in
         // コールバックの結果を continuation.resume(returning:) で返す
         hello { result in
-            continuation.resume(returning: result) // ここで async 関数の戻り値として返す
+            // result → コールバックの結果
+            // continuation.resume(returning: result
+            continuation.resume(returning: result)
+            // ここで async 関数の戻り値として返す
         }
     }
 }
 
 // ④ async/await を使って呼び出す
 Task {
+    // continuation を再開（resume）することで、非同期関数の戻り値（String型）を設定します。
+    // これによって asyncHello() は await を抜けて result を返すことができます
     let result = await asyncHello()
     print(result) // "Hello"（3秒待ってから表示される）
 }
@@ -149,3 +155,45 @@ DispatchQueue.global().async {
  Taskはコンテキストを引き継ぐので、最初のスレッドがメインなら、完了後もメインスレッドに戻る！
  非同期処理中もメインスレッドが解放される点は共通だが、Swift Concurrencyの方が簡潔で安全。
 */
+
+// MARK: - データ競合
+// マルチスレッドプログラミングにおいて、重要な問題はデータ競合（data race)をいかに防ぐかです。複数のスレッドから一つのデータにアクセスした場合、あるスレッドがデータを更新するとデータが不整合を起こしてしまう可能性があります。デバックが非常に難しくやっかいなバグをになることが多いです。
+// 以下はデータ競合の例
+class Score {
+    var logs: [Int] = []
+    private(set) var highScore: Int = 0
+
+    func update(with score: Int) {
+        logs.append(score)
+        if score > highScore { // ①
+            highScore = score // ②
+        }
+    }
+}
+//updateメソッドでは渡されたスコアをlogsに追加し、最高得点よりも多かったらそのスコアでhighScoreプロパティを更新するというシンプルな処理になっています。
+//複数スレッドからupdateメソッドを実行して何が起こるかをみてみます。
+
+let score = Score()
+DispatchQueue.global(qos: .default).async {
+    score.update(with: 100) // ③
+    print(score.highScore)  // ④
+}
+DispatchQueue.global(qos: .default).async {
+    score.update(with: 110) // ⑤
+    print(score.highScore)　// ⑥
+}
+//期待する出力は順不同で100, 110が出力されることです。
+//③と④はそれぞれ別スレッドで同じscoreインスタンスに対してメソッドを実行します。
+//データ競合がなければ、それぞれ渡した点数がhighScoreとして出力されるはずです。
+//
+//ところが、Swift Playgroundで何回か実行すると、どちらも100になる場合や、110になる場合があります。
+//
+//これはupdateメソッド中で、①scoreが最高点数かを判断する行から②highScoreを更新する行に処理が渡る間にデータの不整合が起こるからです。
+//
+//例えば、以下の順番で処理が進むとどちらの出力も100になります。
+//
+//③が①を通過
+//⑤が①と②を通過し、highScoreが110になる
+//③が②を通過し、highScoreが100になる
+//④が通過し、100を出力
+//⑥が通過し、100を出力
