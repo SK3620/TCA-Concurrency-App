@@ -197,3 +197,32 @@ DispatchQueue.global(qos: .default).async {
 //③が②を通過し、highScoreが100になる
 //④が通過し、100を出力
 //⑥が通過し、100を出力
+
+// MARK: - Actor データ競合解決
+// actorとは？
+// 新しい型の種類
+// 参照型
+// インスタンスに外からアクセスするものは、同時に一つのみに限定される（2つ以上の場所から同時にアクセスすることはできない） → Actor隔離 Actor isolatedと呼ぶ
+// 外からアクセスする際はawaitが必要
+// イニシャライザー、プロパティ、メソッド定義、プロトコル適応などclass, struct, enumを同じ特徴をもつ
+actor Score2 {
+    var logs: [Int] = []
+    private(set) var highScore: Int = 0
+
+    func update(with score: Int) {
+        logs.append(score)
+        if score > highScore { // ①
+            highScore = score // ②
+        }
+    }
+}
+let score2 = Score2()
+Task.detached(operation: { () -> Void in
+    await score2.update(with: 100)
+})
+Task.detached(operation: { () -> Void in
+    await score2.update(with: 110)
+})
+// どちらも100になる場合や、110になる場合がなくなり
+// 必ず、100, 110が順不同で出力される（データ競合がなくなる）
+
