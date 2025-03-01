@@ -219,9 +219,11 @@ actor Score2 {
 let score2 = Score2()
 Task.detached(operation: { () -> Void in
     await score2.update(with: 100)
+    print(await score2.highScore) // awaitをつけるルール
 })
 Task.detached(operation: { () -> Void in
     await score2.update(with: 110)
+    print(await score2.highScore)
 })
 // どちらも100になる場合や、110になる場合がなくなり
 // 必ず、100, 110が順不同で出力される（データ競合がなくなる）
