@@ -203,7 +203,8 @@ DispatchQueue.global(qos: .default).async {
 // actorとは？
 // 新しい型の種類
 // 参照型
-// インスタンスに外からアクセスするものは、同時に一つのみに限定される（2つ以上の場所から同時にアクセスすることはできない） → Actor隔離 Actor isolatedと呼ぶ
+// インスタンスに外からアクセスするものは、同時に一つのみに限定される（2つ以上の場所（スレッド）から同時にアクセスすることはできない） → Actor隔離 Actor isolatedと呼ぶ
+// 並行処理でデータ競合を防ぐための仕組み
 // 外からアクセスする際はawaitが必要
 // イニシャライザー、プロパティ、メソッド定義、プロトコル適応などclass, struct, enumを同じ特徴をもつ
 actor Score2 {
@@ -229,3 +230,60 @@ Task.detached(operation: { () -> Void in
 // どちらも100になる場合や、110になる場合がなくなり
 // 必ず、100, 110が順不同で出力される（データ競合がなくなる）
 
+// MARK: - actorで競合状態（Race Condition）防げない
+
+// 競合状態(Race Condition) マルチスレッドにおける典型的な不具合一つ
+// プログラミング実行結果が各スレッド実行順に依存する状態
+// 同じ入力を与えても異なるデータを出力する状態
+
+// actorには 再入可能性（Reentrancy） があるため、場合によっては 競合状態（Race Condition） が発生する可能性がある
+
+import Foundation
+
+actor Counter {
+    private var value = 0
+
+    func increment() async -> Int {
+        let current = value  // `value` を取得
+        await Task.sleep(1_000_000_000)  // 1秒待機（他のタスクが割り込める）
+        value = current + 1  // `value` を更新
+        return value
+    }
+}
+
+@main
+struct Main {
+    static func main() async {
+        let counter = Counter()
+
+        // 2つの非同期タスクを並行実行
+        async let task1 = counter.increment()
+        async let task2 = counter.increment()
+
+        let result1 = await task1
+        let result2 = await task2
+
+        print("Result 1: \(result1), Result 2: \(result2)")
+    }
+}
+/*
+ このコードでの競合の流れ
+ task1 が counter.increment() を呼び出し、value を取得（例えば 0）。
+ task1 が await Task.sleep(...) に到達し、一時的に中断。
+ task2 も counter.increment() を呼び出し、value を取得（0）。
+ task2 も await Task.sleep(...) に到達し、一時的に中断。
+ task1 が再開し、value = 0 + 1 に更新（value = 1）。
+ task2 も再開し、同じ値 0 に +1 をして value = 1 に更新（本来 2 になるべき）。
+ 期待する結果は 1 と 2 だが、実際には 1 と 1 になる可能性がある（データ競合が発生）。
+*/
+
+// データの変更を一貫して直列化するために nonisolated な await を避け、Task.sleep を別スレッドで実行しないようにする方法がある。
+actor Counter {
+    private var value = 0
+
+    func increment() async -> Int {
+        value += 1  // `await` せずに直列実行
+        return value
+    }
+}
+// このようにすると value の変更が中断されず、競合状態が発生しない。
