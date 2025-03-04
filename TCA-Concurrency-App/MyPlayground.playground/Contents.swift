@@ -19,13 +19,14 @@ func world() async throws -> String {
 // 呼び出し
 Task {
     do {
-        let hello1 = try await hello()
-        let world1 = try await world()
-        print(hello1 + world1)
+        let hello1 = try await hello()  // `hello()` を実行（待機）
+        let world1 = try await world()  // helloの完了後、`world()` を実行（待機）
+        print(hello1 + world1)          // `hello1` と `world1` を出力
         
-        async let hello2 = hello()
-        async let world2 = world()
-        try await print(hello2 + world2)
+        async let hello2 = hello()  // 並行に hello() を実行
+        async let world2 = world()  // 並行に world() を実行
+        // hello()とworld()どちらの完了を待ってからprint出力
+        try await print(hello2 + world2) // `hello2` `world2` の結果を取得し出力
     } catch {
         print("error")
     }
