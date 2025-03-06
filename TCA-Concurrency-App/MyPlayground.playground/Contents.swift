@@ -245,7 +245,7 @@ actor Counter {
 
     func increment() async -> Int {
         let current = value  // `value` を取得
-        await Task.sleep(1_000_000_000)  // 1秒待機（他のタスクが割り込める）
+        await Task.sleep(1_000_000_000)  // 1秒待機（他のタスクが割り込める）こいつが悪い。
         value = current + 1  // `value` を更新
         return value
     }
