@@ -321,8 +321,8 @@ Task {
 }
 
 // （出力）
-📝 before sleep count: 0
-📝 after sleep count: 1
+//📝 before sleep count: 0
+//📝 after sleep count: 1
 
 //この問題への対応としては以下の対応が可能です。
 //
