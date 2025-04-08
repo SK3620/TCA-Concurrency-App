@@ -287,3 +287,45 @@ actor Counter {
     }
 }
 // このようにすると value の変更が中断されず、競合状態が発生しない。
+
+// MARK: - actorで競合状態（Race Condition）防げない②
+//一方で、再入可能性によりawaitの前後で状態が変わる可能性があります。（= 競合状態（race condition））
+//例えば以下のコードではcountの値は最初は0ですが、await後は1になります。
+
+actor Demo {
+    var count = 0
+
+    func doWork() async {
+        print("📝 before sleep count: \(count)")
+
+        // awaitにより他のタスクがここまで到達する可能性がある
+        try! await Task.sleep(nanoseconds: 5_000_000_000)
+
+        // countの値がawaitの前後で一致しない可能性がある
+        print("📝 after sleep count: \(count)")
+    }
+
+    func increment() {
+        count += 1
+    }
+}
+
+let demo = Demo()
+
+Task {
+    await demo.doWork()
+}
+
+Task {
+    await demo.increment()
+}
+
+// （出力）
+📝 before sleep count: 0
+📝 after sleep count: 1
+
+//この問題への対応としては以下の対応が可能です。
+//
+//状態変更を同期的に（awaitを挟まずに）実行する
+//await後に再度状態を確認する
+
